@@ -1,0 +1,13 @@
+<form action="/add_user" method="POST">
+    <p>Luo uusi käyttäjätunnus</p>
+    <p>Tunnus:<br>
+    <input type="text" name="username"></p>
+    <p>Salasana:<br>
+    <input type="password" name="password1"></p>
+    <p>Toista salasana:<br>
+    <input type="password" name="password2"></p>
+    <input type="submit" value="Luo tunnus"><br>
+    {% if not password_ok %}
+        <p>Salasana ei täsmää!</p>
+    {% endif %}
+</form>
