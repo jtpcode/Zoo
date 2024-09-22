@@ -29,12 +29,10 @@ def login():
     result = db.session.execute(text(sql), {"username":username})
     user = result.fetchone() 
     if user:
-        # correct username 
         hash_value = user.password
         if check_password_hash(hash_value, password):
-            # correct password
             session["username"] = username
-            login_ok = True
+            return redirect(url_for("frontpage"))
 
     return redirect(url_for("index", login_ok=login_ok))
 
@@ -57,8 +55,9 @@ def add_user():
     password1 = request.form["password1"]
     password2 = request.form["password2"]
 
-    # check password
+    # check password and add user into database
     if password1 == password2:
+        # TBA: check if user already exists
         hash_value = generate_password_hash(password1)
         sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
         db.session.execute(text(sql), {"username":username, "password":hash_value})
@@ -73,3 +72,23 @@ def add_user():
 def user_added():
     return "<p>Käyttäjätunnus luotu onnistuneesti!</p><a href='/'>Siirry kirjautumissivulle</a>"
 
+@app.route("/frontpage")
+def frontpage():
+    return render_template("frontpage.html")
+
+@app.route("/create_animal")
+def create_animal():
+    return render_template("create_animal.html")
+
+@app.route("/add_animal", methods=["POST"])
+def add_animal():
+    name = request.form["name"]
+    species = request.form["species"]
+
+    # TBA: add animal into database
+
+    return redirect(url_for("animal_added"))
+
+@app.route("/animal_added")
+def animal_added():
+    return "<p>Uusi asukas luotu eläintarhaan onnistuneesti!</p><a href='/frontpage'>Siirry etusivulle</a>"

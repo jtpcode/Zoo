@@ -4,4 +4,42 @@ CREATE TABLE users (
     password TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'user',
     registered TIMESTAMP DEFAULT NOW()
-    );
+);
+
+CREATE TABLE species (
+    id SERIAL PRIMARY KEY,
+    species TEXT NOT NULL
+);
+
+CREATE TABLE origin (
+    id SERIAL PRIMARY KEY,
+    origin TEXT NOT NULL
+);
+
+CREATE TABLE staff (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    role TEXT NOT NULL,
+    hire_date DATE,
+    contact_info TEXT
+);
+
+CREATE TABLE animal (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    species_id INTEGER REFERENCES species,
+    gender TEXT NOT NULL,
+    birth_day DATE,
+    origin_id INTEGER REFERENCES origin,
+    diet TEXT,
+    health_status TEXT,
+    caretaker_id INTEGER REFERENCES staff,
+    deceased DATE
+);
+
+CREATE TABLE medical_record (
+    id SERIAL PRIMARY KEY,
+    record TEXT NOT NULL,
+    animal_id INTEGER REFERENCES animal,
+    date TIMESTAMP DEFAULT NOW()
+);
