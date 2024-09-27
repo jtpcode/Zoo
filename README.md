@@ -11,7 +11,7 @@ to for example:
 - ...
 
 NOTE:
-At the moment you can create a new user from the login page to enable easy testing. Database allows admin users, but for now new users are basic users by default and no admin features have been implemented. If this was a real application only admins could add new users, which would require adding admin manually into the database.
+You have to create the first user manually into the database, password needs to be hashed with werkzeug.security. Database allows admin users, but for now new users are basic users by default and no admin features have been implemented. If this was a real application only admins could add new users.
 
 When logged in, there is a dummy-link/page to add a new animal into the zoo, but it doesn't yet add it into the database, even though the tables exist in schema.sql. None of the advanced features (medical records, search etc.) has not yet been implemented.
 
@@ -34,5 +34,4 @@ $ psql < schema.sql
 
 Now you can start the application with command:
 $ flask run
-
 

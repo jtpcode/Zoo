@@ -1,13 +1,55 @@
-<form action="/add_user" method="POST">
-    <p>Luo uusi käyttäjätunnus</p>
-    <p>Tunnus:<br>
-    <input type="text" name="username"></p>
-    <p>Salasana:<br>
-    <input type="password" name="password1"></p>
-    <p>Toista salasana:<br>
-    <input type="password" name="password2"></p>
-    <input type="submit" value="Luo tunnus"><br>
-    {% if not password_ok %}
-        <p>Salasana ei täsmää!</p>
-    {% endif %}
-</form>
+<!doctype html>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<title>Lisää käyttäjä</title>
+
+<div class="container">
+    <!-- Navigointi -->
+    <nav class="navbar navbar-expand-sm navbar-light">
+        <a class="navbar-brand" href="/frontpage">Etusivu</a>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Eläintietokanta</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/create_animal">Lisää asukas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/create_user">Lisää käyttäjä</a>
+          </li>
+        </ul>
+    </nav>
+
+    <!-- Lomake -->
+    <form action="/add_user" method="POST">
+        <div class="form-group col-3">
+            <label for="username">Tunnus</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="form-group col-3">
+            <label for="password1">Salasana</label>
+            <input type="password" class="form-control" id="password1" name="password1" required>
+        </div>
+        <div class="form-group col-3">
+            <label for="password2">Toista salasana</label>
+            <input type="password" class="form-control" id="password2" name="password2" required>
+        </div>
+        <div class="form-group col-3">
+            <button type="submit" class="btn btn-primary">Luo tunnus</button>
+        </div>
+        <div class="form-group col-3" style="color: red;">
+            {% if not length_ok %}
+                <p>
+                    Käyttäjätunnus: 6-20 merkkiä!<br>
+                    Salasana: 8-64 merkkiä!
+                </p>
+            {% elif not username_ok %}
+                <p>Käyttäjänimi on jo käytössä!</p>
+            {% elif not password_ok %}
+                <p>Salasana ei täsmää!</p>
+            {% elif user_added %}
+                <p style="color: black;">Uusi käyttäjä lisätty onnistuneesti!</p>
+            {% endif %}
+        </div>
+    </form>
+</div>

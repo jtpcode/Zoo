@@ -1,3 +1,27 @@
-<p>Hei, {{ session.username }}!</p>
-<p><a href="/create_animal">Lisää uusi eläintarhan asukas</a></p>
-<a href="/logout">Kirjaudu ulos</a>
+<!doctype html>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<title>Etusivu</title>
+
+<div class="container">
+    <!-- Navigointi -->
+    <nav class="navbar navbar-expand-sm navbar-light">
+        <a class="navbar-brand" href="/frontpage">Etusivu</a>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Eläintietokanta</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/create_animal">Lisää asukas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/create_user">Lisää käyttäjä</a>
+          </li>
+        </ul>
+    </nav>
+
+    <div class="col">
+        <p>Hei, {{ session.username }}!</p>
+        <a href="/logout">Kirjaudu ulos</a>
+    </div>
+</div>
