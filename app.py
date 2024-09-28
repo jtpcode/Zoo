@@ -32,13 +32,14 @@ def login():
     login_ok = False
 
     # check username and password
-    sql = "SELECT id, password FROM users WHERE username=:username"
+    sql = "SELECT id, password, role FROM users WHERE username=:username"
     result = db.session.execute(text(sql), {"username":username})
-    user = result.fetchone() 
+    user = result.fetchone()
     if user:
         hash_value = user.password
         if check_password_hash(hash_value, password):
             session["username"] = username
+            session["role"] = user.role
             return redirect(url_for("frontpage"))
 
     return redirect(url_for("index", login_ok=login_ok))
@@ -128,3 +129,25 @@ def add_animal():
 
     return redirect(url_for("create_animal", animal_added=animal_added))
 
+@app.route("/create_staff")
+def create_staff():
+    staff_added = session.get("staff_added", False)
+    session["staff_added"] = False
+
+    return render_template("create_staff.html", staff_added=staff_added)
+
+@app.route("/add_staff", methods=["POST"])
+def add_staff():
+    name = request.form["name"]
+    role = request.form["role"]
+    date = request.form["date"]
+    contact = request.form["contact"]
+
+    # add staff member into database
+    # TBA: check if staff member already exists
+    sql = "INSERT INTO staff (name, role, hire_date, contact_info) VALUES (:name, :role, :date, :contact)"
+    db.session.execute(text(sql), {"name":name, "role":role, "date":date, "contact":contact})
+    db.session.commit()
+    session["staff_added"] = True
+
+    return redirect(url_for("create_staff"))

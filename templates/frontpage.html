@@ -22,6 +22,10 @@
 
     <div class="col">
         <p>Hei, {{ session.username }}!</p>
-        <a href="/logout">Kirjaudu ulos</a>
+        {% if session.role == "admin" %}
+          <p><a href="/create_staff">Lisää työntekijä</a></p>
+        {% endif %}
+
+        <p><a href="/logout">Kirjaudu ulos</a></p>
     </div>
 </div>

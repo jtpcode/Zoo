@@ -11,9 +11,9 @@ to for example:
 - ...
 
 NOTE:
-You have to create the first user manually into the database, password needs to be hashed with werkzeug.security. Database allows admin users, but for now new users are basic users by default and no admin features have been implemented. If this was a real application only admins could add new users.
+You can use the provided seed.sql to create initial admin user and some data into certain tables. Only admin can add new staff members. New application users are regular users by default.
 
-When logged in, there is a dummy-link/page to add a new animal into the zoo, but it doesn't yet add it into the database, even though the tables exist in schema.sql. None of the advanced features (medical records, search etc.) has not yet been implemented.
+When logged in, there is a dummy-link/page to add a new animal into the zoo, but it doesn't yet add it into the database, even though the tables exist in schema.sql. None of the advanced features (medical records, search etc.) have not yet been implemented.
 
 --
 
@@ -31,6 +31,9 @@ $ pip install -r ./requirements.txt
 
 Define database scheme with command:
 $ psql < schema.sql
+
+Input data into tables with command:
+$ psql < seed.sql
 
 Now you can start the application with command:
 $ flask run
