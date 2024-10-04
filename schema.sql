@@ -32,19 +32,20 @@ CREATE TABLE diagnosis (
 CREATE TABLE animal (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
-    species_id INTEGER REFERENCES species,
+    species_id INTEGER NOT NULL REFERENCES species,
     gender TEXT NOT NULL,
     birth_day DATE NOT NULL,
-    origin_id INTEGER REFERENCES origin,
+    origin_id INTEGER NOT NULL REFERENCES origin,
     diet TEXT,
     health_status INTEGER REFERENCES diagnosis,
-    caretaker_id INTEGER REFERENCES staff,
-    deceased DATE NOT NULL
+    caretaker_id INTEGER NOT NULL REFERENCES staff,
+    deceased DATE
 );
 
 CREATE TABLE medical_record (
     id SERIAL PRIMARY KEY,
     record TEXT NOT NULL,
-    animal_id INTEGER REFERENCES animal,
+    animal_id INTEGER NOT NULL REFERENCES animal,
     date TIMESTAMP DEFAULT NOW()
 );
+
