@@ -8,6 +8,11 @@
     <br>
     <form action="/login" method="POST">
         <div class="form-group col-3">
+            {% if not login_ok %}
+                <p style="color: red;"><strong>Väärä käyttäjätunnus tai salasana!</strong></p>
+            {% endif %}
+        </div>
+        <div class="form-group col-3">
             <label for="username">Tunnus</label>
             <input type="text" class="form-control" id="username" name="username" required>
         </div>
@@ -17,11 +22,6 @@
         </div>
         <div class="form-group col-3">
             <button type="submit" class="btn btn-primary">Kirjaudu</button>
-        </div>
-        <div class="form-group col-3">
-            {% if not login_ok %}
-                <p style="color: red;">Väärä käyttäjätunnus tai salasana!</p>
-            {% endif %}
         </div>
     </form>
 </div>

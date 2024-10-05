@@ -26,7 +26,7 @@ CREATE TABLE staff (
 
 CREATE TABLE diagnosis (
     id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL
+    diagnosis TEXT NOT NULL
 );
 
 CREATE TABLE animal (
@@ -34,12 +34,17 @@ CREATE TABLE animal (
     name TEXT NOT NULL,
     species_id INTEGER NOT NULL REFERENCES species,
     gender TEXT NOT NULL,
-    birth_day DATE NOT NULL,
+    birthday DATE NOT NULL,
     origin_id INTEGER NOT NULL REFERENCES origin,
     diet TEXT,
-    health_status INTEGER REFERENCES diagnosis,
     caretaker_id INTEGER NOT NULL REFERENCES staff,
-    deceased DATE
+    deceased DATE DEFAULT NULL
+);
+
+CREATE TABLE animal_diagnosis (
+    PRIMARY KEY (animal_id, diagnosis_id),
+    animal_id INTEGER REFERENCES animal,
+    diagnosis_id INTEGER REFERENCES diagnosis
 );
 
 CREATE TABLE medical_record (

@@ -22,21 +22,82 @@
 
     <!-- Lomake -->
     <form action="/add_animal" method="POST">
+        <div class="form-group col-3" style="color: green;">
+          {% if animal_added %}
+              <p><strong>Uusi asukas lisätty!</strong></p>
+          {% endif %}
+        </div>
+        <div class="form-group col-3" style="color: red;">
+          {% if sql_error %}
+              <p><strong>Tietokantaan vienti epäonnistui!</strong></p>
+          {% endif %}
+        </div>
+        <div class="form-group col-3" style="color: red;">
+          {% if not name_ok %}
+              <p><strong>Nimi on jo käytössä!</strong></p>
+          {% endif %}
+        </div>
         <div class="form-group col-3">
-            <label for="name">Lisää uusi asukas</label>
+            <label for="name">Lisää uusi asukas:</label>
             <input type="text" class="form-control" id="name" name="name" required>
         </div>
         <div class="form-group col-3">
-            <label for="species">Laji</label>
-            <input type="text" class="form-control" id="species" name="species" required>
+          <label for="species">Eläinlaji:</label><br>
+          <select class="form-control" id="species" name="species" required>
+              <option>--Valitse laji--</option>
+              {% for species in species_list %}
+                <option value="{{ species[0] }}">{{ species[1] }}</option>
+              {% endfor %}
+          </select>
+        </div>
+        <div class="form-group col-3">
+          <label for="gender">Sukupuoli:</label>
+          <div class="form-check">
+              <input type="radio" class="form-check-input" id="male" name="gender" value="Uros" required>
+              <label class="form-check-label" for="male">Uros</label>
+          </div>
+          <div class="form-check">
+              <input type="radio" class="form-check-input" id="female" name="gender" value="Naaras">
+              <label class="form-check-label" for="female">Naaras</label>
+          </div>
+        </div>
+        <div class="form-group col-3">
+          <label for="birthday">Syntämäaika:</label>
+          <input type="date" class="form-control" id="birthday" name="birthday" required>
+        </div>
+        <div class="form-group col-3">
+          <label for="origin">Alkuperämaa:</label><br>
+          <select class="form-control" id="origin" name="origin" required>
+              <option>--Valitse maa--</option>
+              {% for origin in origin_list %}
+                <option value="{{ origin[0] }}">{{ origin[1] }}</option>
+              {% endfor %}
+          </select>
+        </div>
+        <div class="form-group col-3">
+          <label for="diet">Ruokavalio:</label>
+          <input type="text" class="form-control" id="diet" name="diet">
+        </div>
+        <div class="form-group col-3">
+          <label for="diagnosis">Diagnoosi:<br>(valitse useampi pitämällä Ctrl-nappi pohjassa)</label><br>
+          <select class="form-select" id="diagnosis" name="diagnosis" multiple>
+              <option>--Valitse diagnoosit--</option>
+              {% for diagnosis in diagnosis_list %}
+                <option value="{{ diagnosis[0] }}">{{ diagnosis[1] }}</option>
+              {% endfor %}
+          </select>
+        </div>
+        <div class="form-group col-3">
+          <label for="caretaker">Hoitaja:</label><br>
+          <select class="form-control" id="caretaker" name="caretaker" required>
+              <option>--Valitse hoitaja--</option>
+              {% for caretaker in caretaker_list %}
+                <option value="{{ caretaker[0] }}">{{ caretaker[1] }}</option>
+              {% endfor %}
+          </select>
         </div>
         <div class="form-group col-3">
             <button type="submit" class="btn btn-primary">Luo asukas</button>
-        </div>
-        <div class="form-group col-3"></div>
-            {% if animal_added %}
-                <p>Uusi asukas lisätty onnistuneesti!</p>
-            {% endif %}
         </div>
     </form>
 </div>

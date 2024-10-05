@@ -22,6 +22,22 @@
 
     <!-- Lomake -->
     <form action="/add_user" method="POST">
+        <div class="form-group col-3" style="color: red;">
+            {% if not length_ok %}
+                <p><strong>
+                    Käyttäjätunnus: 6-20 merkkiä!<br>
+                    Salasana: 8-64 merkkiä!</strong>
+                </p>
+            {% elif not username_ok %}
+                <p><strong>Käyttäjänimi on jo käytössä!</strong></p>
+            {% elif not password_ok %}
+                <p><strong>Salasana ei täsmää!</strong></p>
+            {% elif sql_error %}
+                <p><strong>Tietokantaan vienti epäonnistui!</strong></p>
+            {% elif user_added %}
+                <p style="color: green;"><strong>Uusi käyttäjä lisätty!</strong></p>
+            {% endif %}
+        </div>
         <div class="form-group col-3">
             <label for="username">Tunnus</label>
             <input type="text" class="form-control" id="username" name="username" required>
@@ -36,20 +52,6 @@
         </div>
         <div class="form-group col-3">
             <button type="submit" class="btn btn-primary">Luo tunnus</button>
-        </div>
-        <div class="form-group col-3" style="color: red;">
-            {% if not length_ok %}
-                <p>
-                    Käyttäjätunnus: 6-20 merkkiä!<br>
-                    Salasana: 8-64 merkkiä!
-                </p>
-            {% elif not username_ok %}
-                <p>Käyttäjänimi on jo käytössä!</p>
-            {% elif not password_ok %}
-                <p>Salasana ei täsmää!</p>
-            {% elif user_added %}
-                <p style="color: black;">Uusi käyttäjä lisätty onnistuneesti!</p>
-            {% endif %}
         </div>
     </form>
 </div>

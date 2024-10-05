@@ -11,9 +11,9 @@ to for example:
 - ...
 
 NOTE:
-You can use the provided seed.sql to create initial admin user and some data into certain tables. Only admin can add new staff members. New application users are regular users by default.
+You can use the provided seed.sql to create initial admin user (username, password = admin) and some data into needed tables. Only admin can add new staff members. New application users are regular users by default, not yet possible to change into admin status.
 
-When logged in, there is a dummy-link/page to add a new animal into the zoo, but it doesn't yet add it into the database, even though the tables exist in schema.sql. None of the advanced features (medical records, search etc.) have not yet been implemented.
+Medical records, search etc. have not yet been implemented.
 
 --
 

@@ -11,20 +11,29 @@ VALUES ('Karhu');
 INSERT INTO species (species)
 VALUES ('Leijona');
 
+INSERT INTO species (species)
+VALUES ('Siili');
+
 INSERT INTO origin (origin)
 VALUES ('Saksa');
 
 INSERT INTO origin (origin)
 VALUES ('Kenia');
 
+INSERT INTO origin (origin)
+VALUES ('Japani');
+
 INSERT INTO staff (name, role, hire_date)
 VALUES ('Hanna Hoituri', 'Hoitaja', '2020-08-10');
 
 INSERT INTO staff (name, role, hire_date)
+VALUES ('Kalle Kalamies', 'Hoitaja', '2015-05-11');
+
+INSERT INTO staff (name, role, hire_date)
 VALUES ('Lea Lekuri', 'Lääkäri', '2018-03-07');
 
-INSERT INTO diagnosis (name)
+INSERT INTO diagnosis (diagnosis)
 VALUES ('Diabetes');
 
-INSERT INTO diagnosis (name)
+INSERT INTO diagnosis (diagnosis)
 VALUES ('Munuaisen vajaatoiminta');
