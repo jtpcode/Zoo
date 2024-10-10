@@ -228,3 +228,51 @@ def add_staff():
 
     return redirect(url_for("create_staff"))
 
+@app.route("/animal_records")
+def animal_records():
+    animal_found = session.get("animal_found", True)
+    animal_data = None
+    diagnoses = None
+
+    # Reset session values
+    session["animal_found"] = True
+
+    try:
+        if session["animal_name"]:
+            sql = """SELECT a.name, s.species, a.gender, a.birthday, o.origin, a.diet, st.name, a.deceased
+                    FROM animal a
+                    LEFT JOIN species s ON a.species_id = s.id
+                    LEFT JOIN origin o ON a.origin_id = o.id
+                    LEFT JOIN staff st ON a.caretaker_id = st.id
+                    WHERE a.name = :name"""
+            animal_data = db.session.execute(text(sql), {"name":session["animal_name"]}).fetchall()
+            sql = """SELECT COALESCE(string_agg(d.diagnosis, ', '), '-') AS diagnoses
+                    FROM diagnosis d
+                    LEFT JOIN animal_diagnosis ad ON d.id = ad.diagnosis_id
+                    LEFT JOIN animal a ON ad.animal_id = a.id
+                    WHERE a.name = :name"""
+            diagnoses = db.session.execute(text(sql), {"name":session["animal_name"]}).fetchall()
+    except:
+        pass
+
+    return render_template("animal_records.html",
+                           animal_found=animal_found,
+                           animal_data=animal_data,
+                           diagnoses = diagnoses)
+
+@app.route("/search_animal", methods=["POST"])
+def search_animal():
+    # csrf check
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+
+    name = request.form["name"]
+    # Check if animal in database
+    sql = "SELECT 1 FROM animal WHERE name = :name"
+    found = db.session.execute(text(sql), {"name":name}).fetchone()
+    if found:
+        session["animal_name"] = name
+    else:
+        session["animal_found"] = False
+    
+    return redirect(url_for("animal_records"))

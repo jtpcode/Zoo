@@ -13,7 +13,9 @@ to for example:
 NOTE:
 You can use the provided seed.sql to create initial admin user (username, password = admin) and some data into needed tables. Only admin can add new staff members. New application users are regular users by default, not yet possible to change into admin status.
 
-Medical records, search etc. have not yet been implemented.
+Medical records (eläintietokanta):
+- the names of the animals are unique, so you search using names
+- adding or printing medical notes not yet implemented
 
 --
 
