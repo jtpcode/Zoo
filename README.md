@@ -21,20 +21,20 @@ How to use:
 
 Clone this repository into your own computer and locate its root directory. Create .env -file and add following information:
 
-DATABASE_URL=<local-database-location>
-SECRET_KEY=<secret-key>
+- DATABASE_URL=<local-database-location>
+- SECRET_KEY=<secret-key>
 
 Next, activate the virtual environment and install the dependencies for the application with commands:
-$ python3 -m venv venv
-$ source venv/bin/activate
-$ pip install -r ./requirements.txt
+- $ python3 -m venv venv
+- $ source venv/bin/activate
+- $ pip install -r ./requirements.txt
 
 Define database scheme with command:
-$ psql < schema.sql
+- $ psql < schema.sql
 
 Input data into tables with command:
-$ psql < seed.sql
+- $ psql < seed.sql
 
 Now you can start the application with command:
-$ flask run
+- $ flask run
 

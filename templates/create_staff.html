@@ -34,7 +34,7 @@
         </div>
         <div class="form-group col-3">
             <label for="name">Lisää uusi työntekijä</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+            <input type="text" class="form-control" id="name" name="name" minlength="3" maxlength="32" required>
         </div>
         <div class="form-group col-3">
             <label for="role">Työrooli</label>
@@ -53,10 +53,11 @@
         </div>
         <div class="form-group col-3">
             <label for="contact">Yhteystiedot</label>
-            <input type="text" class="form-control" id="contact" name="contact">
+            <textarea class="form-control" id="contact" name="contact" minlength="0" maxlength="200"></textarea>
         </div>
         <div class="form-group col-3">
             <button type="submit" class="btn btn-primary">Luo työntekijä</button>
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         </div>
     </form>
 </div>

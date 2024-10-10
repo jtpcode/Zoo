@@ -1,9 +1,10 @@
 from flask import Flask
-from flask import redirect, render_template, request, session, url_for
+from flask import redirect, render_template, request, session, url_for, abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from os import getenv
 from werkzeug.security import check_password_hash, generate_password_hash
+import secrets
 
 ### NOTES: ###
 
@@ -44,9 +45,14 @@ def login():
             session["username"] = username
             session["role"] = user.role
             session["login_ok"] = True
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect(url_for("frontpage"))
 
     return redirect(url_for("index"))
+
+@app.route("/frontpage")
+def frontpage():
+    return render_template("frontpage.html")
 
 @app.route("/logout")
 def logout():
@@ -77,6 +83,10 @@ def create_user():
 
 @app.route("/add_user", methods=["POST"])
 def add_user():
+    # csrf check
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+    
     username = request.form["username"]
     password1 = request.form["password1"]
     password2 = request.form["password2"]
@@ -106,10 +116,6 @@ def add_user():
                     session["sql_error"] = True
 
     return redirect(url_for("create_user"))
-
-@app.route("/frontpage")
-def frontpage():
-    return render_template("frontpage.html")
 
 @app.route("/create_animal")
 def create_animal():
@@ -144,6 +150,10 @@ def create_animal():
 
 @app.route("/add_animal", methods=["POST"])
 def add_animal():
+    # csrf check
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+    
     name = request.form["name"]
     species_id = request.form["species"]
     gender = request.form["gender"]
@@ -197,6 +207,10 @@ def create_staff():
 
 @app.route("/add_staff", methods=["POST"])
 def add_staff():
+    # csrf check
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+    
     name = request.form["name"]
     role = request.form["role"]
     date = request.form["date"]

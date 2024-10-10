@@ -39,12 +39,12 @@
         </div>
         <div class="form-group col-3">
             <label for="name">Lisää uusi asukas:</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+            <input type="text" class="form-control" id="name" name="name" minlength="3" maxlength="32" required>
         </div>
         <div class="form-group col-3">
           <label for="species">Eläinlaji:</label><br>
           <select class="form-control" id="species" name="species" required>
-              <option>--Valitse laji--</option>
+              <option value="">--Valitse laji--</option>
               {% for species in species_list %}
                 <option value="{{ species[0] }}">{{ species[1] }}</option>
               {% endfor %}
@@ -68,7 +68,7 @@
         <div class="form-group col-3">
           <label for="origin">Alkuperämaa:</label><br>
           <select class="form-control" id="origin" name="origin" required>
-              <option>--Valitse maa--</option>
+              <option value="">--Valitse maa--</option>
               {% for origin in origin_list %}
                 <option value="{{ origin[0] }}">{{ origin[1] }}</option>
               {% endfor %}
@@ -76,12 +76,12 @@
         </div>
         <div class="form-group col-3">
           <label for="diet">Ruokavalio:</label>
-          <input type="text" class="form-control" id="diet" name="diet">
+          <textarea class="form-control" id="diet" name="diet" minlength="0" maxlength="200"></textarea>
         </div>
         <div class="form-group col-3">
           <label for="diagnosis">Diagnoosi:<br>(valitse useampi pitämällä Ctrl-nappi pohjassa)</label><br>
           <select class="form-select" id="diagnosis" name="diagnosis" multiple>
-              <option>--Valitse diagnoosit--</option>
+              <option value="">--Valitse diagnoosit--</option>
               {% for diagnosis in diagnosis_list %}
                 <option value="{{ diagnosis[0] }}">{{ diagnosis[1] }}</option>
               {% endfor %}
@@ -90,7 +90,7 @@
         <div class="form-group col-3">
           <label for="caretaker">Hoitaja:</label><br>
           <select class="form-control" id="caretaker" name="caretaker" required>
-              <option>--Valitse hoitaja--</option>
+              <option value="">--Valitse hoitaja--</option>
               {% for caretaker in caretaker_list %}
                 <option value="{{ caretaker[0] }}">{{ caretaker[1] }}</option>
               {% endfor %}
@@ -98,6 +98,7 @@
         </div>
         <div class="form-group col-3">
             <button type="submit" class="btn btn-primary">Luo asukas</button>
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         </div>
     </form>
 </div>
