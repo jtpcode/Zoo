@@ -4,7 +4,7 @@
 <title>Lisää työntekijä</title>
 
 <div class="container">
-    <!-- Navigointi -->
+    <!-- Navigation -->
     <nav class="navbar navbar-expand-sm navbar-light">
         <a class="navbar-brand" href="/frontpage">Etusivu</a>
         <ul class="navbar-nav">
@@ -20,7 +20,7 @@
         </ul>
     </nav>
 
-    <!-- Hakukenttä -->
+    <!-- Search animal -->
     <form action="/search_animal" method="POST">
         <div class="form-group col-3" style="color: red;">
             {% if not animal_found %}
@@ -36,9 +36,11 @@
             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         </div>
     </form>
-    <!-- Taulukko -->
+
+    <!-- Basic information table -->
     <div class="form-group">
-        <table class="table table-striped">
+        <label for="info"><b>Perustiedot</b></label>
+        <table class="table table-striped" id="info">
             <thead>
                 <tr>
                     <th>Nimi</th>
@@ -53,19 +55,51 @@
                 </tr>
             </thead>
             <tbody>
+                {% if animal_data %}
+                    <tr>
+                        <td>{{ animal_data[1] or '-' }}</td>
+                        <td>{{ animal_data[2] or '-' }}</td>
+                        <td>{{ animal_data[3] or '-' }}</td>
+                        <td>{{ animal_data[4] or '-' }}</td>
+                        <td>{{ animal_data[5] or '-' }}</td>
+                        <td>{{ animal_data[6] or '-' }}</td>
+                        <td>{{ animal_data[7] or '-' }}</td>
+                        <td>{{ diagnoses[0] or '-' }}</td>
+                        <td>{{ animal_data[8] or '-' }}</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div class="col">
+        {% if animal_data %}
+            <a href="/create_record"><b>Lisää hoitokirjaus</b></a>
+        {% endif %}
+    </div>
+    <br>
+
+    <!-- Medical records --> 
+    <div class="form-group">
+        <label for="record"><b>Hoitokirjaukset</b></label>
+        <table class="table table-striped" id="record">
+            <thead>
                 <tr>
-                    {% if animal_data %}
-                        <td>{{ animal_data[0][0] or '-' }}</td>
-                        <td>{{ animal_data[0][1] or '-' }}</td>
-                        <td>{{ animal_data[0][2] or '-' }}</td>
-                        <td>{{ animal_data[0][3] or '-' }}</td>
-                        <td>{{ animal_data[0][4] or '-' }}</td>
-                        <td>{{ animal_data[0][5] or '-' }}</td>
-                        <td>{{ animal_data[0][6] or '-' }}</td>
-                        <td>{{ diagnoses[0][0] or '-' }}</td>
-                        <td>{{ animal_data[0][7] or '-' }}</td>
-                    {% endif %}
+                    <th>Pvm</th>
+                    <th>Kirjaaja</th>
+                    <th>Kirjaus</th>
                 </tr>
+            </thead>
+            <tbody>
+                {% if records %}
+                    {% for record in records %}
+                    <tr>
+                        <td>{{ record[0] or '-' }}</td>
+                        <td>{{ record[1] or '-' }}</td>
+                        <td>{{ record[2] or '-' }}</td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
             </tbody>
         </table>
     </div>

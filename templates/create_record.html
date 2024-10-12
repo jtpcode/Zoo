@@ -1,7 +1,7 @@
 <!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-<title>Etusivu</title>
+<title>Lisää asukas</title>
 
 <div class="container">
     <!-- Navigation -->
@@ -20,12 +20,20 @@
         </ul>
     </nav>
 
-    <div class="col">
-        <p>Hei, {{ session.username }}!</p>
-        {% if session.role == "admin" %}
-          <p><a href="/create_staff">Lisää työntekijä</a></p>
-        {% endif %}
+    <!-- Form for new record -->
+    <form action="/create_record" method="POST">
+        <div class="form-group col-3" style="color: red;">
+            {% if sql_error %}
+                <p><strong>Tietokantaan vienti epäonnistui!</strong></p>
+            {% endif %}
+        </div>
+        <div class="form-group col-3">
+            <label for="record">Hoitokirjaus:</label>
+            <textarea class="form-control" id="record" name="record" minlength="5" maxlength="2000" required></textarea>
+        </div>
+        <div class="form-group col-3">
+            <button type="submit" class="btn btn-primary">Lisää kirjaus</button>
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        </div>
+    </form>
 
-        <p><a href="/logout">Kirjaudu ulos</a></p>
-    </div>
-</div>

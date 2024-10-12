@@ -1,21 +1,24 @@
 # Zoo
-The idea of this application is to serve the staff of an imaginary Zoo. Once logged in a member of the staff can manipulate the database 
-to for example:
-- add new staff members as application users
-- add new animals (unique "ssn", species, origin, name, birthday, special diet, health status...)
-- list all animals
-- search information about animals based on "ssn", name, species, origin..
-- add a medical record (with timestamp and who wrote the message) concerning animal care, for example "Ben the bear was fed and given antibiotics"
-- see the medical records concerning a specific animal
-- search medical records with certain keywords or dates
-- ...
+The idea of this application is to serve the staff of an Imaginary Zoo. Once logged in a member of the staff can:
+- Admin:
+    - add new staff members
+    - add new app users (new application users are basic users by default)
+    - add new animals (unique name, species, origin, name, birthday, special diet, health status...)
+- Basic user:
+    - search information about animals based on the unique name
+    - add a medical record (with timestamp and who wrote the message) concerning animal care
+    - see the medical records concerning a specific animal
 
-NOTE:
-You can use the provided seed.sql to create initial admin user (username, password = admin) and some data into needed tables. Only admin can add new staff members. New application users are regular users by default, not yet possible to change into admin status.
+There are few origin countries, species and diagnoses in the seed.sql, but in real life all possible countries/species/diagnoses
+would be included in the database.
+
+You can use the provided seed.sql to create:
+- initial admin user with username, password = admin, admin
+- two basic users with username, password = "Hanna Hoituri", hannahoituri and "Kalle Kalamies", kallekalamies
+- some data into needed tables.
 
 Medical records (eläintietokanta):
-- the names of the animals are unique, so you search using names
-- adding or printing medical notes not yet implemented
+- the names of the animals are unique, so you search using names (at the moment you must know them)
 
 --
 

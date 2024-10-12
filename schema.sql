@@ -3,7 +3,7 @@ CREATE TABLE users (
     username TEXT NOT NULL,
     password TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'user',
-    registered TIMESTAMP DEFAULT NOW()
+    registered TIMESTAMP(0) DEFAULT NOW()
 );
 
 CREATE TABLE species (
@@ -37,7 +37,7 @@ CREATE TABLE animal (
     birthday DATE NOT NULL,
     origin_id INTEGER NOT NULL REFERENCES origin,
     diet TEXT,
-    caretaker_id INTEGER NOT NULL REFERENCES staff,
+    staff_id INTEGER NOT NULL REFERENCES staff,
     deceased DATE DEFAULT NULL
 );
 
@@ -51,6 +51,7 @@ CREATE TABLE medical_record (
     id SERIAL PRIMARY KEY,
     record TEXT NOT NULL,
     animal_id INTEGER NOT NULL REFERENCES animal,
-    date TIMESTAMP DEFAULT NOW()
+    user_id INTEGER NOT NULL REFERENCES users,
+    date TIMESTAMP(0) DEFAULT NOW()
 );
 

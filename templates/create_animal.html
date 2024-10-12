@@ -4,7 +4,7 @@
 <title>Lisää asukas</title>
 
 <div class="container">
-    <!-- Navigointi -->
+    <!-- Navigation -->
     <nav class="navbar navbar-expand-sm navbar-light">
         <a class="navbar-brand" href="/frontpage">Etusivu</a>
         <ul class="navbar-nav">
@@ -20,7 +20,7 @@
         </ul>
     </nav>
 
-    <!-- Lomake -->
+    <!-- Form for new animal -->
     <form action="/add_animal" method="POST">
         <div class="form-group col-3" style="color: green;">
           {% if animal_added %}
@@ -76,7 +76,7 @@
         </div>
         <div class="form-group col-3">
           <label for="diet">Ruokavalio:</label>
-          <textarea class="form-control" id="diet" name="diet" minlength="0" maxlength="200"></textarea>
+          <textarea class="form-control" id="diet" name="diet" maxlength="200"></textarea>
         </div>
         <div class="form-group col-3">
           <label for="diagnosis">Diagnoosi:<br>(valitse useampi pitämällä Ctrl-nappi pohjassa)</label><br>
@@ -88,11 +88,11 @@
           </select>
         </div>
         <div class="form-group col-3">
-          <label for="caretaker">Hoitaja:</label><br>
-          <select class="form-control" id="caretaker" name="caretaker" required>
+          <label for="staff">Hoitaja:</label><br>
+          <select class="form-control" id="staff" name="staff" required>
               <option value="">--Valitse hoitaja--</option>
-              {% for caretaker in caretaker_list %}
-                <option value="{{ caretaker[0] }}">{{ caretaker[1] }}</option>
+              {% for staff in staff %}
+                <option value="{{ staff[0] }}">{{ staff[1] }}</option>
               {% endfor %}
           </select>
         </div>

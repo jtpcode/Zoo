@@ -6,7 +6,12 @@ from os import getenv
 from werkzeug.security import check_password_hash, generate_password_hash
 import secrets
 
-### NOTES: ###
+# NOTES:
+# estä sivullemeno ilman kirjautumista
+# vain admin voi luoda usereita ja staffia ja eläimiä!
+# siisti navigaatiovalikko
+# eläinvalinta alasvetovalikosta?
+# toimiiko eläimen luonnissa alasvetovalikot, jos esim. ei yhtään hoitajaa?
 
 app = Flask(__name__)
 app.secret_key = getenv("SECRET_KEY")
@@ -43,6 +48,7 @@ def login():
         hash_value = user.password
         if check_password_hash(hash_value, password):
             session["username"] = username
+            session["user_id"] = user.id
             session["role"] = user.role
             session["login_ok"] = True
             session["csrf_token"] = secrets.token_hex(16)
@@ -137,14 +143,14 @@ def create_animal():
     sql = "SELECT id, diagnosis FROM diagnosis;"
     diagnosis_list = db.session.execute(text(sql)).fetchall()
     sql = "SELECT id, name FROM staff WHERE role = :role;"
-    caretaker_list = db.session.execute(text(sql), {"role":role}).fetchall()
+    staff = db.session.execute(text(sql), {"role":role}).fetchall()
 
     return render_template("create_animal.html",
                            animal_added=animal_added,
                            species_list=species_list,
                            origin_list=origin_list,
                            diagnosis_list=diagnosis_list,
-                           caretaker_list=caretaker_list,
+                           staff=staff,
                            name_ok=name_ok,
                            sql_error=sql_error)
 
@@ -161,19 +167,19 @@ def add_animal():
     origin_id = request.form["origin"]
     diet = request.form["diet"]
     diagnoses = request.form.getlist("diagnosis")
-    caretaker_id = request.form["caretaker"]
+    staff_id = request.form["staff"]
 
     # Check if animal name already exists
     sql = "SELECT COUNT(*) FROM animal WHERE name = :name"
     c = db.session.execute(text(sql), {"name":name}).fetchone()[0]
     if c == 0:
         try:
-            # Animal into database
-            sql = "INSERT INTO animal (name, species_id, gender, birthday, origin_id, diet, caretaker_id)" \
-                "VALUES (:name, :species_id, :gender, :birthday, :origin_id, :diet, :caretaker_id) RETURNING id"
+            # Add animal into database
+            sql = """INSERT INTO animal (name, species_id, gender, birthday, origin_id, diet, staff_id)
+                    VALUES (:name, :species_id, :gender, :birthday, :origin_id, :diet, :staff_id) RETURNING id"""
             result = db.session.execute(text(sql),
                     {"name":name, "species_id":species_id, "gender":gender, "birthday":birthday, "origin_id":origin_id,
-                    "diet":diet, "caretaker_id":caretaker_id})
+                    "diet":diet, "staff_id":staff_id})
             animal_id = result.fetchone()[0]
 
             # Chosen diagnoses into junction table
@@ -216,7 +222,7 @@ def add_staff():
     date = request.form["date"]
     contact = request.form["contact"]
 
-    # Staff member into database (existing name is allowed)
+    # Add staff member into database (existing name is allowed)
     try:
         sql = "INSERT INTO staff (name, role, hire_date, contact_info) VALUES (:name, :role, :date, :contact)"
         db.session.execute(text(sql), {"name":name, "role":role, "date":date, "contact":contact})
@@ -233,32 +239,46 @@ def animal_records():
     animal_found = session.get("animal_found", True)
     animal_data = None
     diagnoses = None
+    records = None
 
     # Reset session values
     session["animal_found"] = True
 
     try:
         if session["animal_name"]:
-            sql = """SELECT a.name, s.species, a.gender, a.birthday, o.origin, a.diet, st.name, a.deceased
+            # Get animal basic information
+            sql = """SELECT a.id, a.name, s.species, a.gender, a.birthday, o.origin, a.diet, st.name, a.deceased
                     FROM animal a
                     LEFT JOIN species s ON a.species_id = s.id
                     LEFT JOIN origin o ON a.origin_id = o.id
-                    LEFT JOIN staff st ON a.caretaker_id = st.id
+                    LEFT JOIN staff st ON a.staff_id = st.id
                     WHERE a.name = :name"""
-            animal_data = db.session.execute(text(sql), {"name":session["animal_name"]}).fetchall()
+            animal_data = db.session.execute(text(sql), {"name":session["animal_name"]}).fetchone()
             sql = """SELECT COALESCE(string_agg(d.diagnosis, ', '), '-') AS diagnoses
                     FROM diagnosis d
                     LEFT JOIN animal_diagnosis ad ON d.id = ad.diagnosis_id
                     LEFT JOIN animal a ON ad.animal_id = a.id
                     WHERE a.name = :name"""
-            diagnoses = db.session.execute(text(sql), {"name":session["animal_name"]}).fetchall()
+            diagnoses = db.session.execute(text(sql), {"name":session["animal_name"]}).fetchone()
+
+            # Store animal_id for creating medical records
+            session["animal_id"] = animal_data[0]
+
+            # Get animal medical records
+            sql = """SELECT mr.date, u.username, mr.record
+                    FROM medical_record mr
+                    LEFT JOIN animal a ON mr.animal_id = a.id
+                    LEFT JOIN users u ON mr.user_id = u.id 
+                    WHERE a.name = :name"""
+            records = db.session.execute(text(sql), {"name":session["animal_name"]}).fetchall()
     except:
         pass
 
     return render_template("animal_records.html",
                            animal_found=animal_found,
                            animal_data=animal_data,
-                           diagnoses = diagnoses)
+                           diagnoses = diagnoses,
+                           records=records)
 
 @app.route("/search_animal", methods=["POST"])
 def search_animal():
@@ -276,3 +296,34 @@ def search_animal():
         session["animal_found"] = False
     
     return redirect(url_for("animal_records"))
+
+@app.route("/create_record", methods=["GET", "POST"])
+def create_record():
+    sql_error = session.get("sql_error", False)
+
+    # Reset session values
+    session["sql_error"] = False
+
+    if request.method == "POST":
+        # csrf check
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
+
+        # Add medical record into database
+        record = request.form["record"]
+        try:
+            sql = """INSERT INTO medical_record (record, animal_id, user_id)
+                    VALUES (:record, :animal_id, :user_id)"""
+            db.session.execute(text(sql), {"record":record, "animal_id":session["animal_id"], "user_id":session["user_id"]})
+            db.session.commit()
+
+            return redirect(url_for("animal_records"))
+        except Exception as e:
+            print(f"Error: {e}")
+            session["sql_error"] = True
+
+            return redirect(url_for("create_record"))
+
+    return render_template("create_record.html",
+                           sql_error=sql_error)
+
