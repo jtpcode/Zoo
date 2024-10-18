@@ -7,8 +7,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import secrets
 
 # TBA:
-# vain admin voi luoda usereita, staffia ja eläimiä!
-# siisti navigaatiovalikko
 # toimiiko eläimen luonnissa alasvetovalikot, jos esim. ei yhtään hoitajaa?
 # jaa koodi osiin
 # Jos virhe formin täytössä -> lataa uudestaan esitäytettynä?
