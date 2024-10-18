@@ -25,8 +25,9 @@ You can use the provided seed.sql to create:
 - some data into needed tables.
 
 Future development ideas:
-- when searching animal information, choose animal name from a list
+- when searching animal information, choose animal name from a list?
 - unique identifiers for animals (like "social security number") and staff members
+- enable editing medical records
 - 
 
 --
