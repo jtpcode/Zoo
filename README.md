@@ -3,7 +3,7 @@ The idea of this application is to serve the staff of an Imaginary Zoo. Once log
 - Admin:
     - add new staff members
     - add new app users (new application users are basic users by default)
-    - add new animals (unique name, species, origin, name, birthday, special diet, health status...)
+    - add new animals (unique name, species, origin, birthday, special diet, health status...)
 - Basic user:
     - search information about animals based on the unique name
     - add a medical record (with timestamp and who wrote the message) concerning animal care
@@ -19,6 +19,9 @@ You can use the provided seed.sql to create:
 
 Medical records (eläintietokanta):
 - the names of the animals are unique, so you search using names (at the moment you must know them)
+
+Future development ideas:
+- 
 
 --
 
